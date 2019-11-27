@@ -10,8 +10,8 @@
 						<h4>{{ site.title }}</h4>
 						<p>{{ site.description }}</p>
 					</li>
-					<li><a href="{{ site.url }}/about/"><span class="btn btn-inverse">更多</span></a></li>
-					{% if site.email %}<li>
+					<!-- <li><a href="{{ site.url }}/about/"><span class="btn btn-inverse">了解更多</span></a></li>
+					{% if site.email %}<li> -->
                         <a href="mailto:{{ site.email }}" target="_blank" rel="noopener noreferrer"><i class="fa fa-fw fa-envelope-square"></i> 邮箱</a>
                     </li>{% endif %}
                     {% if site.twitter %}<li>
@@ -85,13 +85,13 @@
                     </li>{% endif %}
 				</ul><!-- /.dl-submenu -->
 			</li>
-			<li>
+			<!-- <li>
 				<a href="#">Posts</a>
 				<ul class="dl-submenu">
 					<li><a href="{{ site.url }}/posts/">All Posts</a></li>
 					<li><a href="{{ site.url }}/tags/">All Tags</a></li>
 				</ul>
-			</li>
+			</li> -->
 			{% for link in site.data.navigation %}
 		    {% if link.url contains 'http' %}
 		        {% assign domain = '' %}
