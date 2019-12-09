@@ -1,27 +1,33 @@
+// "use strict"
+
 var name = "window";
-function fn() {
-    var name = 'fn';
-    func1();
-    function func1() {
-        func2()
-        function func2(){
-            console.log(this.name);
-        }  
+var o = {
+    name:"obj",
+    fn:function(value1,value2){
+        console.log(`传入的值是:${value1}===${value2}`)
+        console.log(this.name);
     }
 }
-// fn()
- // windowsName
+var newFn = o.fn;
 
- let obj = {
-        name : "obj",
-        func1:function(){
-            this.func2()
-        },
-        func2:function(){
-            func3()
-            function func3(){
-                console.log(this.name);
-            }
-        }
- }
-obj.func1()
+newFn.bind(undefined)("hello","bind");
+// 传入的值是:hello===bind
+// window
+
+newFn.bind(null)("hello","bind");
+// 传入的值是:hello===bind
+// window
+
+newFn.apply(undefined,["hello","apply"])
+// 传入的值是:hello===apply
+// window
+newFn.apply(null,["hello","apply"])
+// 传入的值是:hello===apply
+// window
+
+newFn.call(undefined,"hello","call")
+// 传入的值是:hello===call
+// window
+newFn.call(null,"hello","call")
+// 传入的值是:hello===call
+// window
