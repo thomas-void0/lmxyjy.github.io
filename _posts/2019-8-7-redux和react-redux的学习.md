@@ -158,6 +158,10 @@ comments: true
 
 **示例二：现在我们已经简单的理解了redux的工作流程，接下来我们在react中去使用一下redux。这次同样实现一个计数器：**
 
+**首先：** 使用create-react-app脚手架搭建模板，然后执行命令行安装redux:
+
+`npm install redux --save-dev`
+
 **第一步：** 在脚手架搭建的src目录下，创建一个action-types.js,内容如下：
 
 ````js
@@ -302,4 +306,170 @@ export default store
 >而不同的中间件之所以可以组合使用，是因为 Redux 要求所有的中间件必须提供统一的接口，每个中间件的尉氏县逻辑虽然不一样，但只要遵循统一的接口就能和redux以及其他的中间件对话了。
 
 **这里我使用的中间件是redux-thunk,除此以外还有redux-saga,redux-promise。但是因为另外2个都没有使用过，所以这里就不再赘述。将来如果有使用到，再回来记录**
+
+**这里我们使用中间件进行一次数据请求：**
+
+**第一步，安装redux-thunk和axios** 
+
+`npm install redux-thunk --save-dev`
+
+`npm install axios --save-dev`
+
+**第二步，改写示例二中的store.js的内容如下：**
+
+````js
+import {createStore,applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+
+//导入reducer函数
+import reducer from './reducer';
+
+//创建仓库
+const store  = createStore(
+    reducer,
+    // window.__REDUX_DEVTOOLS_EXTENSION__&&window.__REDUX_DEVTOOLS_EXTENSION__() //配置redux调试工具
+    
+    /*如果只是使用中间件，不使用扩展程序*/ 
+    applyMiddleware(thunk)
+);
+
+//暴露
+export default store
+````
+
+**第三步:** 在src目录下action-types中，修改内容如下： 
+
+````js
+export const ADD = "add";
+export const SUB = "sub";
+/*中间件添加的数据请求*/
+export const GET_DATA="get_data";
+````
+
+**第四步:** 在src目录下新建一个action-operations.js,内容如下：
+
+````js
+import {GET_DATA} from './action-types';
+import axios from 'axios';
+
+export const getDataAction = ()=>{
+    //返回一个增强的action对象
+    return async dispatch =>{
+        const result = await axios.get("http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20&page=1")
+        const data = result.data.result[0].title;
+        const action = {
+            type:GET_DATA,
+            data
+        }
+        dispatch(action)        
+    }
+
+}
+````
+
+**第五步：** 修改reducer.js中的内容如下：
+
+````js
+import {ADD,SUB,GET_DATA} from './action-types';
+
+//初始化默认值
+const initDefault = {num:0,data:"暂时还没有信息"}
+
+export default (state=initDefault,action)=>{
+    /*因为reducer函数是一个纯函数。纯函数是不能直接修改传入的参数的。所以在这里我们使用了一次深拷贝*/
+    let newState = JSON.parse(JSON.stringify(state));
+    switch (action.type) {
+        case ADD:
+            newState.num += 1;
+            return newState;
+        case SUB:
+            newState.num -= 1;  
+            return newState;
+        case GET_DATA:
+            newState.data = action.data;
+            return newState;
+        default:
+            return newState;
+    }
+}
+````
+
+**第六步:** 修改App.js组件中的内容如下：
+
+````js
+import React from 'react';
+import store from './store';
+import {ADD,SUB} from './action-types';
+import {getDataAction} from './action-operations';
+
+
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = store.getState();
+    /*subscribe:这个函数是在store中发生改变时进行调用*/
+    store.subscribe(this.getNowState.bind(this));
+  }
+  
+  //数字加
+  numAdd(){
+    store.dispatch({type:ADD})
+  }
+  //数字减
+  numSub(){
+    store.dispatch({type:SUB})
+  }
+
+  //发起请求
+  getData(){
+    //得到经过中间件处理的action对象
+    const action = getDataAction();
+    //发送到store中
+    store.dispatch(action)
+  }
+  
+  //获取当前最新的state
+  getNowState(){
+    this.setState(store.getState())
+  }
+  
+  render(){
+    return (
+      <div>
+        <h1>{this.state.num}</h1>
+        <button onClick={()=>this.numAdd()}>+</button>
+        <hr/>
+        <button onClick={()=>this.numSub()}>-</button>
+        <hr/>
+        <h1>请求到的数据：<span style={{color:"orange"}}>{this.state.data}</span></h1>
+        <button onClick={()=>this.getData()}>发起请求</button>
+      </div>
+    )
+  }
+}
+
+
+export default App;
+````
+
+**效果如下：**
+
+初始化状态：
+
+![中间件1](../assets/img/redux/8.png)
+
+请求数据后的状态：
+
+![中间件1](../assets/img/redux/9.png)
+
+**总结：** 当我们使用中间的时候，明显的区别就是。我们调用了两次`dispatch`。
+
+1. 第一次是在我们调用`getDataAction`这个方法的时候。我们请求了接口的数据，然后对数据进行了一些过滤的处理，生成了一个新的action对象。然后调用`dispatch(action)`将这个action对象传递到了调用的地方。
+2. 在调用函数的地方，我们使用`const action = getDataAction()` 接收到了中间件处理完毕的action对象，然后通过`store.dispatch(action)` 将这个增强的action对象发送到了store中。
+
+由以上流程，再对比之前的图片：
+
+![中间件](../assets/img/redux/7.png)
+
+可以发现，其实中间件就是对我们dispatch方法进行了增强，使其能够处理一些复杂的逻辑。
 
