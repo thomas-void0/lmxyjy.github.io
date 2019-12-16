@@ -6,7 +6,7 @@ project: true
 comments: true
 ---
 
-**redux和react-redux的概念以及在项目中如何去使用redux和react-redux...**
+**Redux和Redux-thunk的概念以及在项目中如何去使用Redux和Redux-thunk...**
 
 **什么是Redux:** Redux是一个用来管理管理数据状态和UI状态的JavaScript应用工具。简单的来说，Redux就是我们的数据管家。
 
