@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Redux和react-redux的概念和用法"
+title:  "Redux和其中间件Redux-thunk的概念及用法"
 date:   2019-12-11
 project: true
 comments: true
@@ -473,3 +473,6 @@ export default App;
 
 可以发现，其实中间件就是对我们dispatch方法进行了增强，使其能够处理一些复杂的逻辑。
 
+**到这一步的代码我已经上传的了相应的github仓库中的`redux-thunk中间件的学习`文件夹** [仓库地址](https://github.com/lmxyjy/redux_base)
+
+**因为篇幅过长，下一篇再记录react-redux的概念和用法**
