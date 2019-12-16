@@ -1,33 +1,47 @@
+// var props = {
+//     name:"brid"
+// }
+
+// class Admin{
+//     constructor(name){
+//         this.props={
+//             name
+//         }
+//     }
+//     fly=()=>{
+//         function canFly(){
+//             console.log("this===>",this);
+//             return this.props.name === "brid";
+//         }
+//         if(canFly.bind(this)()){
+//             console.log("fly");
+//         }else{
+//             throw new Error("i am not a brid");
+//         }
+//     }
+// }
+// const a = new Admin("brid");
+// try {
+//     a.fly()
+// } catch (e) {
+//     console.log(e.message); //Cannot read the "props" of undefined
+// }
+
 // "use strict"
 
-var name = "window";
-var o = {
-    name:"obj",
-    fn:function(value1,value2){
-        console.log(`传入的值是:${value1}===${value2}`)
-        console.log(this.name);
-    }
-}
-var newFn = o.fn;
-
-newFn.bind(undefined)("hello","bind");
-// 传入的值是:hello===bind
-// window
-
-newFn.bind(null)("hello","bind");
-// 传入的值是:hello===bind
-// window
-
-newFn.apply(undefined,["hello","apply"])
-// 传入的值是:hello===apply
-// window
-newFn.apply(null,["hello","apply"])
-// 传入的值是:hello===apply
-// window
-
-newFn.call(undefined,"hello","call")
-// 传入的值是:hello===call
-// window
-newFn.call(null,"hello","call")
-// 传入的值是:hello===call
-// window
+// function Admin(name){
+//     this.props = {name};
+// }
+// Admin.prototype.fly = function(){
+//     function func(){
+//         console.log("this===>",this);
+//         return this.props.name = "husa";
+//     }
+//     if(func()){
+//         console.log("我是咖咖");
+//     }else{
+//         console.log("报错了")
+//     }
+// }
+// let a = new Admin("husa");
+// a.fly()
