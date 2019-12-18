@@ -315,6 +315,46 @@ ReactDOM.render(
 ````
 **项目的源码我放置到了github的仓库中的`react-redux的学习`文件夹下** [源码地址](https://github.com/lmxyjy/redux_base)
 
+**这里我们重点需要了解的两个api是：**
 
+1. mapStateToProps
+2. mapDispatchToProps
 
+这里推荐一篇文章讲解这2个api的：[相关连接](https://www.tuicool.com/articles/MrmYN36)
+
+----
+
+**一个问题，当我们在项目开发中，肯定不能将所有的action处理都写到一个reducer函数中，因为这样会是我们的reducer文件过于臃肿，也不利于我们的后期维护。所以我们需要将多个reducer函数合并起来，在这里我们的redux也提供了相应的方法：**
+
+`combineReducers`:可以将我们的多个reducer合并起来。
+
+示例demo：
+
+````js
+/*reducer.js*/
+import {combineReducers} from 'redux';
+import adminReducer from './reducers/reducer-admin'; /*管理页面的reducer函数*/
+import categoryReducer from './reducers/reducer-category';/*分类页面的reducer函数*/
+
+let reducer = combineReducers({
+    admin:adminReducer, /*合并后，在容器组件中调用的时候用key值做区分*/
+    category:categoryReducer,
+})
+export default reducer
+````
+**这个api其实非常简单，但是我们在使用它的时候要注意我们在容器组件中调用的时候就不能直接写state了。应该写成以下的形式：**
+
+````js
+/*category的容器组件*/
+const mapStateToProps = (state) => ({
+    data:state.category.data,
+    loading:state.category.loading
+})
+
+/*admin的容器组件*/
+const mapStateToProps = (state) => ({
+    time:state.admin.time
+})
+````
+**可以看到，当我们默认一个reducer函数的时候，我们的state中存储的就是一个组件的值。但是当我们有多个reducer函数的时候，我们的值就会有很多了。我们在容器组件中调用的时候，就必须指定绑定的key值。这样才能确定拿到的是哪一个组件的状态值**
 
