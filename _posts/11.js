@@ -45,3 +45,22 @@
 // }
 // let a = new Admin("husa");
 // a.fly()
+// let colors = ["red", "blue", "green"];
+// console.log(colors.toString())
+// console.log(colors.valueOf())
+// console.log(colors)
+
+// var colors = ["red","blue"];
+// colors.push("brown");
+// colors[3] = "black"; 
+// console.log(colors.length);
+// var item = colors.pop();
+// console.log(item)
+
+var values = ["1","2","3"]; 
+var sum = values.reduceRight(function(prev,cur,index,array){
+    prev.push(cur);
+    return prev
+},["0"])
+console.log(sum); //[ '0', '3', '2', '1' ]
+
