@@ -113,3 +113,79 @@ react官方对其的解释是:
 **问题二，在函数组件中，给antd的级联选择器初始化options的时候，改变options状态值，但是级联选择器中的数据依旧是初始值。**
 
 该问题暂时没找到解决的方法，mark一下。解决了再来记录。
+
+**问题三，在函数组件中，父组件如何调用子组件中的方法。**
+
+这个问题在我们之前的类组件写法中其实很简单，就是使用React.create()的方式创建一个ref对象。然后将这个对象挂载到我们对应的子组件上即可。
+
+但是在我写函数组件的时候，我发现这个方法不好使了。控制台直接报了警告，告诉我们不能使用以前的方式去获取函数组件的方法了。建议我们使用React.forwardRef方法去创建组件。
+
+在函数组件中父组件如果想要调用子组件中的方法，整个的流程就是如下demo所示：
+
+````tsx
+//父组件
+import React from 'react'
+import Child from "./App2";
+
+
+const Demo:React.FC = ()=>{
+	const refBox = useRef<HTMLInputElement>(null);
+
+	//点击按钮调用方法，执行子组件中的函数
+	const focusTextInput =():void=>{
+		if(refBox.current){
+			refBox.current.hehe();//调用子组件的hehe方法
+		}
+	}
+	return(
+		<>
+			<button onClick={focusTextInput}>点击</button>
+			<Child ref={refBox} >click me!</Child>
+		</>
+	)
+}
+
+export default Demo;
+````
+
+````tsx
+//子组件
+import React,{useImperativeHandle,Ref} from 'react';
+
+export interface IFunc{
+    hehe:()=>void
+}
+
+const Child = React.forwardRef((props:any,ref:Ref<IFunc>)=>{
+        useImperativeHandle(ref,()=>({
+            hehe : ()=>{
+                console.log("我是子组件的呵呵方法");
+            }            
+        }))
+
+    return (
+        <button ref={ref}>
+            {props.children}
+        </button>
+    )
+})
+export default Child;
+````
+**流程如下：**
+
+1. 父组件中使用`useRef`创建一个ref对象。并且将这个对象挂载到子组件上。
+2. 子组件中调用`useImperativeHandle` 方法暴露出需要提供给父组件使用的方法。
+3. 父组件使用`refBox.current.hehe()` 的方式调用子组件中的`hehe`方法。
+
+**这里引入了两个新的api：**
+
+`forwardRef` :会创建一个React组件，这个组件能够将其接受的 ref 属性转发到其组件树下的另一个组件中。这种技术并不常见，但在以下两种场景中特别有用：
+
+1. 转发 refs 到 DOM 组件
+2. 在高阶组件中转发 refs
+
+这里我们就使用了它的转发，将我们需要的方法转发到了我们的父级组件中
+
+`useImperativeHandle` : 可以让你在使用 ref 时自定义暴露给父组件的实例值。在大多数情况下，应当避免使用 ref 这样的命令式代码。useImperativeHandle 应当与 forwardRef 一起使用
+
+[**这里附上别人对这两个API的详解：**](https://mp.weixin.qq.com/s/7Vuy_zzJnYpBiGBK5ps09A)
