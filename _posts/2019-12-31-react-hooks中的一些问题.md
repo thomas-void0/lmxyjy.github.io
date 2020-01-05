@@ -189,3 +189,154 @@ export default Child;
 `useImperativeHandle` : 可以让你在使用 ref 时自定义暴露给父组件的实例值。在大多数情况下，应当避免使用 ref 这样的命令式代码。useImperativeHandle 应当与 forwardRef 一起使用
 
 [**这里附上别人对这两个API的详解：**](https://mp.weixin.qq.com/s/7Vuy_zzJnYpBiGBK5ps09A)
+
+**问题三，在被Form.create()()包装过后的子组件，父组件无法直接传递值到子组件中去,同时也无法调用子组件中的方法**
+
+我的需求是：调用子组件中的表单方法发送数据。但是这里遇到了一个问题：
+
+1. 子组件是antd的表单组件。当子组件被Form.create包装过后，父组件直接给子组件传值会导致ts报错。
+2. 父组件调用表单子组件中的方法。
+
+
+解决的办法其实就在antd的文档当中：
+
+[**antd Form表单如何在ts中使用**](https://ant.design/components/form-cn/#components-form-demo-validate-other)
+
+**首先对于父子组件传值的问题：**
+
+这里我们需要导入antd定义的form表单的接口定义，也就是:
+
+`import { FormComponentProps } from 'antd/lib/form/Form';`
+
+示例demo如下:
+
+````tsx
+// 子组件child
+import React from 'react'
+import {Form,Input} from "antd";
+import {FormComponentProps} from "antd/es/form";
+
+const Item = Form.Item;
+
+//集成form表单的接口
+interface IProps extends FormComponentProps{
+    propsValue:string //父组件传递过来的值
+}
+
+const App:React.FC<IProps> =({form,propsValue})=>{
+    const {getFieldDecorator} = form;
+    
+    return (
+		<Form>
+			<Item label="用户名：">
+                {getFieldDecorator('username', {
+                    initialValue:propsValue,
+                    rules: [
+                        {required: true,whitespace:true,message: '账号不能为空或者空格!' },
+                    ],
+                })(
+                    <Input
+                        placeholder="输入用户名"
+                    />,
+                )}
+			</Item>
+		</Form>
+    )
+}
+export default Form.create<IProps>({})(App); //这里需要使用定义好的接口
+````
+**父组件传值如下:**
+
+````tsx
+//父组件
+import React from 'react'
+import Child from "./Test";
+
+const Parent:React.FC<any>=()=>{
+	return (
+		<Child
+			propsValue="父组件传递的字符串"
+		/>
+	)
+}
+````
+以上我们就解决了antd表单子组件中的父子组件传值的问题，接下来比如我们想要调用子组件中的`getFieldDecorator`方法那么我们应该这么做：
+
+首先明确知道的是：函数组件中想要父组件调用子组件的方法我们必须要借助`useRef`、`useImperativeHandle` 、`forwardRef` 的力量。在antd的form表单组件中我们可以通过暴露表单form实例的方法去实现需求。具体的demo如下:
+
+````tsx
+//子组件
+import React,{forwardRef,Ref,useImperativeHandle} from 'react'
+import {Form,Input} from "antd";
+import {FormComponentProps} from "antd/es/form";
+
+const Item = Form.Item;
+
+ //父组件传递过来的值
+interface IProps{
+    propsValue:string,
+    ref:Ref<any>,
+    form:any
+}
+
+const App = forwardRef<FormComponentProps,IProps>(({form,propsValue},ref)=>{
+    const {getFieldDecorator} = form;
+    useImperativeHandle(ref,()=>({
+        form,
+    }))
+    return (
+		<Form>
+			<Item label="用户名：">
+                {getFieldDecorator('username', {
+                    initialValue:propsValue,
+                    rules: [
+                        {required: true,whitespace:true,message: '账号不能为空或者空格!' },
+                    ],
+                })(
+                    <Input
+                        placeholder="输入用户名"
+                    />,
+                )}
+			</Item>
+		</Form>
+    )
+})
+export default Form.create<IProps>({})(App);
+````
+
+````tsx
+//父组件
+import React,{useRef} from 'react'
+import Child from "./Test";
+import {Button} from "antd"
+
+interface IValues{
+    username:string
+}
+
+const App:React.FC<any>=()=>{
+    const refBox = useRef<any>(null);
+    //点击调用子组件的方法得到表单的值
+    const getInputValue = ():void=>{
+        refBox.current.validateFields((err:any,values:IValues)=>{
+            if(!err){
+                console.log(values.username);
+            }
+        })
+    }
+    return (
+        <>
+        <Child 
+        ref={refBox}
+        propsValue="父组件传递的字符串"
+        />
+        <Button onClick={getInputValue} type="primary">点击按钮获取表单数据</Button>
+        </>
+    )
+}
+export default App;
+````
+
+**结果如下：** 点击按钮，控制台成功拿到了表单收集器中拿到的值。需求完美解决：
+
+![hooks图片](../assets/img/react-hooks/1.png)
