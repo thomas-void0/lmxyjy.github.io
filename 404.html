@@ -1,8 +1,44 @@
----
-layout: page
-title: "404"
-permalink: /404
-comments: false
----
-<p>There doesn't appear to be anything here. Sorry about that.</p>
-<p>If you've followed a link expecting something to be here, you can <a href="mailto:{{ site.email }}?subject=Page%20not%20found">contact me</a>.</p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+// 2. 实现一个add方法，使计算结果能够满足如下预期：
+// `add(1)(2)(3) = 6;`
+// `add(1, 2, 3)(4) = 10;`
+// `add(1)(2)(3)(4)(5) = 15;`
+        function add(){
+            //首先收集到调用add时传递的值
+            const _args = [].slice.call(arguments);
+
+            //肯定是需要返回一个函数的
+            const add2 = function(){
+                // 调用add2的时候，肯定会传值，这些值都需要收集起来相加
+                _args.push(...arguments)
+                return add2;
+            }
+            return add2;
+            // 肯定是需要改写toString
+            add2.toString = function(){
+                //肯定要返回一个总值
+                // 知道所有的数据数组了，可以直接运算
+                // a 上一个值 b 当前值
+                _args.reduce(function(a,b){
+                    return a + b
+                })
+
+            }
+            
+        }
+        console.log("" + add(1)(2)(3))  //6
+        console.log("" + add(1, 2, 3)(4))//10
+        console.log("" + add(1)(2)(3)(4)(5))//15
+  
+    </script>   
+</body>
+</html>
