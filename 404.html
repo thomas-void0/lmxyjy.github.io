@@ -130,7 +130,7 @@
             console.log("prototype")
         }
 
-        var p1 = new Person3("lkaka",11)
+        // var p1 = new Person3("lkaka",11)
         // console.log(object)
         // p1.getName()
         //会优先执行构造函数中的方法
@@ -441,6 +441,139 @@
         //     return this.value || "养了只柯基"
         // }
     })
+
+    var kobe={
+    number:24,
+    age:32,
+    job:"basketball player",
+    home:"USA",
+    sayJob:function(){
+       return this.job
+    }
+}
+
+var james={
+    number:23,
+    age:22,
+    job:"basketball player",
+    home:"USA",
+    sayJob:function(){
+       return this.job
+    }
+}
+
+function createObj(number,age,job,home){
+    var o = new Object(); //创建一个中间对象
+    o.number = number;
+    o.age = age;
+    o.job = job;
+    o.home = home;
+    o.sayJob = function(){
+        return this.job;
+    }
+    return o;
+}
+
+    // let alean = createObj(3,21,"basketball player","USA")
+    // let lindan = createObj(10,23,"badminton player","China")
+
+    // console.log(alean instanceof Object) //true
+
+    // function CreateObj(number,age,home,job){
+    //     this.number = number;
+    //     this.age = age;
+    //     this.home = home;
+    //     this.job = job;
+    //     this.sayName = function(){
+    //         return this.job
+    //     }
+    // }
+    // let alean =new CreateObj(3,21,"basketball player","USA")
+    // let lindan =new CreateObj(10,23,"badminton player","China")
+    // console.log(alean.constructor === CreateObj) //true
+    // console.log(alean instanceof CreateObj) //true
+    // console.log(lindan instanceof CreateObj) //true
+    // console.log(alean.__proto__ === CreateObj.prototype)
+    // console.log(CreateObj.prototype.constructor === CreateObj)
+    // console.log(alean.constructor === CreateObj)
+
+    // function New(func){
+    //     // 1.创建一个中间对象
+    //     var o = new Object();
+    //     // 2.将o.__proto__指向func.prototype
+    //     if(func.prototype !== null){
+    //         o.__proto__ = func.prototype
+    //     }
+    //     // 3.将构造函数中的this指向中间对象，实际上就是执行构造函数将传入的参数挂载到中间对象上面去
+    //     var retO = func.apply(o,[].slice.call(arguments,1));
+    //     //这一步的主要作用是，如果构造函数执行的时候返回了一个不会空的对象那么就直接返回这个对象
+    //     if((typeof retO === "object" || typeof retO === "function") && retO !== null){
+    //         return retO
+    //     }
+    //     //4,返回中间对象
+    //     return o;
+    // }
+
+    // function Person(name,age){
+    //     this.name = name;
+    //     this.age = age;
+    //     this.sayName=function(){
+    //         return this.name
+    //     }
+    // }
+    // let p1 = New(Person,"咖咖",1)
+    // let p2 = New(Person,"丢丢",2)
+    // console.log(p1.constructor === Person) //true
+    // console.log(p1 instanceof Person) //true
+    // console.log(p2 instanceof Person) //true
+    // function Player(name,age){
+    //     this.name = name;
+    //     this.age = age;
+    //     // this.sayName = function(){
+    //     //     return this.name
+    //     // }
+    //     // 等同于
+    //     this.sayName = new Function("return this.name");
+    // }
+    // let p1 = new Player("kaka",11)
+    // console.log(p1.sayName()) //kaka
+
+
+
+    // let p1 = new Person("james",22)
+    // let p2 = new Person("kobe",24)
+
+    // //constructor
+    // // 每个实例都有一个constructor属性
+    // console.log(p1.constructor ===  Person) //true
+    // // 原型对象也有自己的constructor,指向拥有这个prototype属性的构造函数
+    // console.log(Person.prototype.constructor === Person) //true
+
+    // //__proto__
+    // //new 出来的实例对象中的__proto__属性指向创建这个对象的构造函数的原型对象
+    // console.log(p1.__proto__ === Person.prototype) //true
+    // //原型对象也有自己的__proto__属性，指向创建这个构造函数的原型对象
+    // console.log(Person.prototype.__proto__ === Object.prototype) //true
+
+    // // 实例对象p1和实例对象p2的__proto__属性指向的都是同一个原型对象
+    // console.log(p1.__proto__ === p2.__proto__) //true
+
+    // console.log(p1.__proto__ === Person.prototype); //true
+    // console.log(Person.prototype.__proto__ === Object.prototype) //true
+    // console.log(Object.prototype.__proto__ === null) //true
+    function Anmail(name,age){
+        this.name = name;
+        this.age = age;
+        this.getName = function(){
+            console.log("constructor")
+        }
+    }
+    Anmail.prototype.getName = function(){
+        console.log("prototype")
+    }
+
+    let dog = new Anmail("keji",22)
+    dog.getName() //constructor
     </script>    
 </body>
 </html>
