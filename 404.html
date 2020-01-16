@@ -9,470 +9,470 @@
 <body>
     <script>
         // 工厂模式
-        var perTom = {
-            name:"Tom",
-            age:20,
-            getName:function(){
-                return this.name
-            }
-        }
+//         var perTom = {
+//             name:"Tom",
+//             age:20,
+//             getName:function(){
+//                 return this.name
+//             }
+//         }
 
-        var perJake = {
-            name:"Jack",
-            age:22,
-            getName:function(){
-                return this.name
-            }
-        }
-        //这就是工厂模式
-        var createPerson = function(name,age){
-            var o = new Object();//创建一个模板对象
-            o.name = name;
-            o.age = age;
-            o.getName = function(){
-                return this.name
-            }
-            return o;
-        }
-        //创建2个实例
-        var per1 = createPerson("kaka",20)
-        var per2 = createPerson("heh",21)
+//         var perJake = {
+//             name:"Jack",
+//             age:22,
+//             getName:function(){
+//                 return this.name
+//             }
+//         }
+//         //这就是工厂模式
+//         var createPerson = function(name,age){
+//             var o = new Object();//创建一个模板对象
+//             o.name = name;
+//             o.age = age;
+//             o.getName = function(){
+//                 return this.name
+//             }
+//             return o;
+//         }
+//         //创建2个实例
+//         var per1 = createPerson("kaka",20)
+//         var per2 = createPerson("heh",21)
 
-        // 构造函数
-        function demo(){
-            console.log(this)
-        }
-        // demo()
-        // new demo()
+//         // 构造函数
+//         function demo(){
+//             console.log(this)
+//         }
+//         // demo()
+//         // new demo()
 
-        //new关键词到底做了什么
-        var Person = function (name,age){
-            this.name = name;
-            this.age = age;
-            this.getName = function(){
-                return this.name
-            }
-        }
+//         //new关键词到底做了什么
+//         var Person = function (name,age){
+//             this.name = name;
+//             this.age = age;
+//             this.getName = function(){
+//                 return this.name
+//             }
+//         }
 
-        // 将构造函数以参数的形式传入
-        function New(func){
-            //声明一个中间对象,将对象为最终的返回结果
-            var res = {}
-            if(func.prototype !== null){
+//         // 将构造函数以参数的形式传入
+//         function New(func){
+//             //声明一个中间对象,将对象为最终的返回结果
+//             var res = {}
+//             if(func.prototype !== null){
 
-                // 将实例的原型指向构造函数的原型 将中间对象的原型指向构造函数的原型
-                res.__proto__ = func.prototype;
-            }
+//                 // 将实例的原型指向构造函数的原型 将中间对象的原型指向构造函数的原型
+//                 res.__proto__ = func.prototype;
+//             }
 
-            //ret为构造函数执行的结果，这里通过apply，将构造函数内部的this指向修改为指向res，即实例对象
-            //实例化的时候，传入参数，改变this指向，然后将获取到的参数传入到函数func中去执行
-            // 将构造函数的this指向该中间对象
-            var ret = func.apply(res,Array.prototype.slice.call(arguments,1));
-            // 当我们在构造函数中明确指定了返回对象时，那么new的执行结果就是该返回对象
-            if((typeof ret === "object" || typeof ret === "function") && ret !== null ){
-                return ret;
-            }
+//             //ret为构造函数执行的结果，这里通过apply，将构造函数内部的this指向修改为指向res，即实例对象
+//             //实例化的时候，传入参数，改变this指向，然后将获取到的参数传入到函数func中去执行
+//             // 将构造函数的this指向该中间对象
+//             var ret = func.apply(res,Array.prototype.slice.call(arguments,1));
+//             // 当我们在构造函数中明确指定了返回对象时，那么new的执行结果就是该返回对象
+//             if((typeof ret === "object" || typeof ret === "function") && ret !== null ){
+//                 return ret;
+//             }
 
-            //如果没有明确的指定返回对象，则默认返回res，这个res就是实例对象
-            return res; //返回该中间对象
-        }
+//             //如果没有明确的指定返回对象，则默认返回res，这个res就是实例对象
+//             return res; //返回该中间对象
+//         }
         
-        // 通过new声明创建实例，这里的p1，实际接收的正是new中返回的res
-        // var p1 = New(Person,"tom",20)
-        // console.log(p1.getName())
-        // console.log(p1 instanceof Person);
+//         // 通过new声明创建实例，这里的p1，实际接收的正是new中返回的res
+//         // var p1 = New(Person,"tom",20)
+//         // console.log(p1.getName())
+//         // console.log(p1 instanceof Person);
 
-        function New2(func){
-            // 1.创建一个中间对象
-            //2.将中间对象的原型指向构造函数的原型
-            //3.将构造函数的this指向中间对象
-            //4.返回中间对象
+//         function New2(func){
+//             // 1.创建一个中间对象
+//             //2.将中间对象的原型指向构造函数的原型
+//             //3.将构造函数的this指向中间对象
+//             //4.返回中间对象
 
-            let middleObj = new Object()
+//             let middleObj = new Object()
 
-            if(func.prototype !== null){
-                middleObj.__proto__ = func.prototype;
-            }
+//             if(func.prototype !== null){
+//                 middleObj.__proto__ = func.prototype;
+//             }
 
-            var ret = func.apply(middleObj,[].slice.call(arguments,1));
+//             var ret = func.apply(middleObj,[].slice.call(arguments,1));
 
-            if((typeof ret === "object" || typeof ret === "function") && ret !== null){
-                return ret;
-            }
+//             if((typeof ret === "object" || typeof ret === "function") && ret !== null){
+//                 return ret;
+//             }
 
-            return middleObj;
-        }
-        // var p1 = New2(Person,"咖咖",222)
-        // console.log(p1.getName())
-        // console.log(p1 instanceof Person)
+//             return middleObj;
+//         }
+//         // var p1 = New2(Person,"咖咖",222)
+//         // console.log(p1.getName())
+//         // console.log(p1 instanceof Person)
 
-        function Person2(name,age){
-            this.name = name;
-            this.age = age;
-        }
+//         function Person2(name,age){
+//             this.name = name;
+//             this.age = age;
+//         }
 
-        Person2.prototype.getName = function(){
-            return this.name;
-        }
+//         Person2.prototype.getName = function(){
+//             return this.name;
+//         }
 
-        // var p1 = new Person2("tim",10)
-        // var p2 = new Person2("kaka",20)
-        // console.log(p1.getName === p2.getName)
+//         // var p1 = new Person2("tim",10)
+//         // var p2 = new Person2("kaka",20)
+//         // console.log(p1.getName === p2.getName)
 
-        function Person3(name,age){
-            this.name = name;
-            this.age = age;
-            this.getName = function(){
-                console.log("constructor")
-            }
-        }
-        Person3.prototype.getName = function(){
-            console.log("prototype")
-        }
+//         function Person3(name,age){
+//             this.name = name;
+//             this.age = age;
+//             this.getName = function(){
+//                 console.log("constructor")
+//             }
+//         }
+//         Person3.prototype.getName = function(){
+//             console.log("prototype")
+//         }
 
-        // var p1 = new Person3("lkaka",11)
-        // console.log(object)
-        // p1.getName()
-        //会优先执行构造函数中的方法
+//         // var p1 = new Person3("lkaka",11)
+//         // console.log(object)
+//         // p1.getName()
+//         //会优先执行构造函数中的方法
 
-        // 我们可以用in来判断，一个对象是否拥有某一个属性/方法 无论是该属性/方法存在于实例对象还是原型对象
-        function Person(name,age){
-            this.name = name;
-            this.age = age;
-        }
-        Person.prototype.getName = function(){
-            return this.name;
-        }
-        // var p1 = new Person("tim",1)
-        // console.log(p1.getName())
-        // console.log("name" in p1) //说明构造函数或则原型对象中存在name属性
+//         // 我们可以用in来判断，一个对象是否拥有某一个属性/方法 无论是该属性/方法存在于实例对象还是原型对象
+//         function Person(name,age){
+//             this.name = name;
+//             this.age = age;
+//         }
+//         Person.prototype.getName = function(){
+//             return this.name;
+//         }
+//         // var p1 = new Person("tim",1)
+//         // console.log(p1.getName())
+//         // console.log("name" in p1) //说明构造函数或则原型对象中存在name属性
 
-        // in可以用来判断当前页面是否可以在移动端打开
-        // isMobile = 'ontouchstart' in document
-        // console.log("iiii====>",isMobile)
+//         // in可以用来判断当前页面是否可以在移动端打开
+//         // isMobile = 'ontouchstart' in document
+//         // console.log("iiii====>",isMobile)
 
-        //原型上添加方法或者属性的写法
-        Person.prototype.func1 = function(){}
-        Person.prototype.func2 = function(){}
-        Person.prototype.hobby = "play game"
+//         //原型上添加方法或者属性的写法
+//         Person.prototype.func1 = function(){}
+//         Person.prototype.func2 = function(){}
+//         Person.prototype.hobby = "play game"
 
-        Person.prototype = {
-            constructor:Person,
-            func1:function(){},
-            func2:function(){},
-            hobby:"play game"
-        }
+//         Person.prototype = {
+//             constructor:Person,
+//             func1:function(){},
+//             func2:function(){},
+//             hobby:"play game"
+//         }
 
-        // 继承
-        function Person(name,age){
-            this.name = name;
-            this.age = age;
-        }
-        Person.prototype.getName = function(){
-            return this.name
-        }
-        Person.prototype.getAge = function(){
-            return this.age
-        }
+//         // 继承
+//         function Person(name,age){
+//             this.name = name;
+//             this.age = age;
+//         }
+//         Person.prototype.getName = function(){
+//             return this.name
+//         }
+//         Person.prototype.getAge = function(){
+//             return this.age
+//         }
 
-    // 我们继承时想要的,就是父级构造函数中的操作在子级构造函数中重现一遍即可
-    function cPerson(name,age,job){
-        Person.call(this,name,age);
-        this.job = job;
-    }
-    // 原型的继承,只需要将子级的原型对象设置为父级的一个实例,加入到原型链中即可.
-    // cPerson.prototype = new Person(name,age)
-    // // 子级添加方法
-    // cPerson.prototype.getLive = function(){}
+//     // 我们继承时想要的,就是父级构造函数中的操作在子级构造函数中重现一遍即可
+//     function cPerson(name,age,job){
+//         Person.call(this,name,age);
+//         this.job = job;
+//     }
+//     // 原型的继承,只需要将子级的原型对象设置为父级的一个实例,加入到原型链中即可.
+//     // cPerson.prototype = new Person(name,age)
+//     // // 子级添加方法
+//     // cPerson.prototype.getLive = function(){}
 
-    var Student = function(name,age,grade){
-        // 通过call方法还原Person构造函数中的所有逻辑处理
-        Person.call(this,name,age)  
-        // 这里就是相当于实现了这么一个效果
-        // this.name = name;
-        // this.age = age;
+//     var Student = function(name,age,grade){
+//         // 通过call方法还原Person构造函数中的所有逻辑处理
+//         Person.call(this,name,age)  
+//         // 这里就是相当于实现了这么一个效果
+//         // this.name = name;
+//         // this.age = age;
 
-        this.grade = grade;
-    }
+//         this.grade = grade;
+//     }
 
-    //等价于
-    var Student = function(name,age,grade){
-        this.name = name;
-        this.age = age;
-        this.grade = grade;
-    }
+//     //等价于
+//     var Student = function(name,age,grade){
+//         this.name = name;
+//         this.age = age;
+//         this.grade = grade;
+//     }
 
-    function create(proto,options){
-        //创建一个空对象
-        var tmp = {}
-        // 让这个新的空对象成为父类对象的实例
-        tmp.__proto__ = proto;
+//     function create(proto,options){
+//         //创建一个空对象
+//         var tmp = {}
+//         // 让这个新的空对象成为父类对象的实例
+//         tmp.__proto__ = proto;
 
-        // 传入的方法都挂载到新对象上,新的对象将作为子类对象的原型
-        Object.defineProperties(tmp,options)
-        return tmp;
-    }
+//         // 传入的方法都挂载到新对象上,新的对象将作为子类对象的原型
+//         Object.defineProperties(tmp,options)
+//         return tmp;
+//     }
 
-    //使用create对象来实现原型的继承
-    Student.prototype = create(Person.prototype,{
-        constructor:{value:Student},
-        getGrade:{
-            value:function(){
-                return this.grade
-            }
-        }
-    })
+//     //使用create对象来实现原型的继承
+//     Student.prototype = create(Person.prototype,{
+//         constructor:{value:Student},
+//         getGrade:{
+//             value:function(){
+//                 return this.grade
+//             }
+//         }
+//     })
 
-    // var s1 = new Student("ming",22,5);
-    // console.log(s1.getName())
-    // console.log(s1.getAge())
-    // console.log(s1.getGrade())
+//     // var s1 = new Student("ming",22,5);
+//     // console.log(s1.getName())
+//     // console.log(s1.getAge())
+//     // console.log(s1.getGrade())
 
-    var person4 = {
-        name:"咖咖"
-    }
-    // 使用delete删除该属性
+//     var person4 = {
+//         name:"咖咖"
+//     }
+//     // 使用delete删除该属性
     
-    // console.log(delete person4.name)
+//     // console.log(delete person4.name)
     
-    //通过Object.defineProperty重新添加name属性
-    Object.defineProperty(person4,"name",{
-        configurable:false, //无法被删除
-        value:"jake", //设置name属性的值
-    })
+//     //通过Object.defineProperty重新添加name属性
+//     Object.defineProperty(person4,"name",{
+//         configurable:false, //无法被删除
+//         value:"jake", //设置name属性的值
+//     })
 
-    // console.log(delete person4.name)
-    // person4.name="呵呵"
-    // console.log(person4.name) //无法被修改
+//     // console.log(delete person4.name)
+//     // person4.name="呵呵"
+//     // console.log(person4.name) //无法被修改
 
-    // enumberable
-    var person = {
-        name:"养了只柯基",
-        age:20
-    }
+//     // enumberable
+//     var person = {
+//         name:"养了只柯基",
+//         age:20
+//     }
 
-    //使用for-in枚举person的属性
-    var params = []
+//     //使用for-in枚举person的属性
+//     var params = []
 
-    for(var key in person){
-        params.push(key)
-    }
-    // console.log(params)
+//     for(var key in person){
+//         params.push(key)
+//     }
+//     // console.log(params)
     
-    Object.defineProperty(person,"name",{
-        enumerable:false
-    })
+//     Object.defineProperty(person,"name",{
+//         enumerable:false
+//     })
 
-    var _params = []
-    for(var key in person){
-        _params.push(key);
-    }
-    // console.log(_params)
+//     var _params = []
+//     for(var key in person){
+//         _params.push(key);
+//     }
+//     // console.log(_params)
 
-    // console.log(Object.keys(person))
+//     // console.log(Object.keys(person))
 
-    // writable
-    var person = {
-        name:"咖咖"
-    }
-    person.name = "jack"
+//     // writable
+//     var person = {
+//         name:"咖咖"
+//     }
+//     person.name = "jack"
 
-    // console.log(person.name)
+//     // console.log(person.name)
 
-    //设置person的值为不可更改
-    Object.defineProperty(person,"name",{
-        writable:false
-    })
-    person.name="呼呼"
-    // console.log(person.name)
+//     //设置person的值为不可更改
+//     Object.defineProperty(person,"name",{
+//         writable:false
+//     })
+//     person.name="呼呼"
+//     // console.log(person.name)
 
-    var person = {}
-    Object.defineProperty(person,"name",{
-        value:"keke"
-    })
-    // console.log(person.name)
+//     var person = {}
+//     Object.defineProperty(person,"name",{
+//         value:"keke"
+//     })
+//     // console.log(person.name)
 
-    //get/set
-    var person = {}
-    Object.defineProperty(person,"name",{
-        get:function(){
-            return "咳咳"
-        },
-        set:function(){
-            console.log("set方法被调用")
-            return "老卡"
-        }
-    })
-    // console.log(person.name)
-    // person.name = "老专家"
-    // console.log(person.name)
+//     //get/set
+//     var person = {}
+//     Object.defineProperty(person,"name",{
+//         get:function(){
+//             return "咳咳"
+//         },
+//         set:function(){
+//             console.log("set方法被调用")
+//             return "老卡"
+//         }
+//     })
+//     // console.log(person.name)
+//     // person.name = "老专家"
+//     // console.log(person.name)
 
-    // 设置多个属性
-    var person = {}
-    Object.defineProperties(person,{
-        name:{
-            value:"老卡",
-            configurable:true
-        },
-        age:{
-            get:function(){
-                return this.value || 22
-            },
-            set:function(){
-                this.value = value;
-            }
-        }
-    })
+//     // 设置多个属性
+//     var person = {}
+//     Object.defineProperties(person,{
+//         name:{
+//             value:"老卡",
+//             configurable:true
+//         },
+//         age:{
+//             get:function(){
+//                 return this.value || 22
+//             },
+//             set:function(){
+//                 this.value = value;
+//             }
+//         }
+//     })
 
-    // console.log(person.name)
-    // console.log(person.age)
+//     // console.log(person.name)
+//     // console.log(person.age)
 
-    // 读取属性的特殊值
-    var person = {}
-    Object.defineProperty(person,'name',{
-        value:"alex",
-        writable:false,
-        configurable:false
-    })
-    const a = Object.getOwnPropertyDescriptor(person,"name");
-    // console.log(a)
+//     // 读取属性的特殊值
+//     var person = {}
+//     Object.defineProperty(person,'name',{
+//         value:"alex",
+//         writable:false,
+//         configurable:false
+//     })
+//     const a = Object.getOwnPropertyDescriptor(person,"name");
+//     // console.log(a)
 
-    // var person = {}
-    // Object.defineProperty(person, "name", {     
-    //     writable: false,  //值无法被修改    
-    //     value: "thomas",
-    //     enumerable:false, //无法被枚举
-    //     configurable:false //无法被删除 
-    // }); 
-    // console.log(person.name) //thomas
-    // person.name = "james"
-    // console.log(person.name) //thomas
-    // console.log(delete person.name) //false 
-    // console.log(Object.keys(person)) //[]
+//     // var person = {}
+//     // Object.defineProperty(person, "name", {     
+//     //     writable: false,  //值无法被修改    
+//     //     value: "thomas",
+//     //     enumerable:false, //无法被枚举
+//     //     configurable:false //无法被删除 
+//     // }); 
+//     // console.log(person.name) //thomas
+//     // person.name = "james"
+//     // console.log(person.name) //thomas
+//     // console.log(delete person.name) //false 
+//     // console.log(Object.keys(person)) //[]
 
-//     var person = {}; 
-// Object.defineProperty(person, "name", {     
-//     configurable: false,     
-//     value: "Nicholas" 
-// }); 
+// //     var person = {}; 
+// // Object.defineProperty(person, "name", {     
+// //     configurable: false,     
+// //     value: "Nicholas" 
+// // }); 
  
-// //抛出错误 
-// Object.defineProperty(person, "name", {     
-//     configurable: true,     
-//     value: "Nicholas" 
-// }); 
+// // //抛出错误 
+// // Object.defineProperty(person, "name", {     
+// //     configurable: true,     
+// //     value: "Nicholas" 
+// // }); 
 
-    // var person = {}
-    // Object.defineProperty(person,"name",{
-    //     value:"咖咖",
-    // })
-    // console.log(person.name) //咖咖
-    // person.name = "丢丢";
-    // console.log(person.name) //咖咖
-    // console.log(delete person.name) //false
+//     // var person = {}
+//     // Object.defineProperty(person,"name",{
+//     //     value:"咖咖",
+//     // })
+//     // console.log(person.name) //咖咖
+//     // person.name = "丢丢";
+//     // console.log(person.name) //咖咖
+//     // console.log(delete person.name) //false
 
-    // var person = {}
-    // //定义访问器属性,不能出现数据属性中的属性 
-    // Object.defineProperty(person,"name",{
-    //     configurable:true,
-    //     enumerable:true,
-    //     // value:"咖咖", //报错,设置了不是访问器属性中的属性
-    //     get:function(){
-    //         console.log("getter")
-    //         return this.value
-    //     },
-    //     set:function(value){
-    //         console.log("setter")
-    //         this.value = value
-    //     }
-    // })
-    // //访问属性,调用get方法 //getter
-    // console.log(person.name) //undefined
-    // //设置属性,调用set方法 //setter
-    // person.name = "咖咖2" 
-    // //访问属性,调用get方法 //getter
-    // console.log(person.name) // 咖咖2
+//     // var person = {}
+//     // //定义访问器属性,不能出现数据属性中的属性 
+//     // Object.defineProperty(person,"name",{
+//     //     configurable:true,
+//     //     enumerable:true,
+//     //     // value:"咖咖", //报错,设置了不是访问器属性中的属性
+//     //     get:function(){
+//     //         console.log("getter")
+//     //         return this.value
+//     //     },
+//     //     set:function(value){
+//     //         console.log("setter")
+//     //         this.value = value
+//     //     }
+//     // })
+//     // //访问属性,调用get方法 //getter
+//     // console.log(person.name) //undefined
+//     // //设置属性,调用set方法 //setter
+//     // person.name = "咖咖2" 
+//     // //访问属性,调用get方法 //getter
+//     // console.log(person.name) // 咖咖2
         
-    // var zoo = {};
-    // Object.defineProperties(zoo,{
-    //     tiger:{
-    //         value:"老虎",
-    //         configurable:false,
-    //         enumerable:true,
-    //         writable:true
-    //     },
-    //     panda:{
-    //         value:"熊猫",
-    //         configurable:false,
-    //         enumerable:true,
-    //         writable:true
-    //     }
-    // })
-    // console.log(zoo);//{tiger: "老虎", panda: "熊猫"}
+//     // var zoo = {};
+//     // Object.defineProperties(zoo,{
+//     //     tiger:{
+//     //         value:"老虎",
+//     //         configurable:false,
+//     //         enumerable:true,
+//     //         writable:true
+//     //     },
+//     //     panda:{
+//     //         value:"熊猫",
+//     //         configurable:false,
+//     //         enumerable:true,
+//     //         writable:true
+//     //     }
+//     // })
+//     // console.log(zoo);//{tiger: "老虎", panda: "熊猫"}
     
-    // var desc = Object.getOwnPropertyDescriptor(zoo,"tiger")
-    // console.log(desc); //{value: "老虎", writable: true, enumerable: true, configurable: false}
+//     // var desc = Object.getOwnPropertyDescriptor(zoo,"tiger")
+//     // console.log(desc); //{value: "老虎", writable: true, enumerable: true, configurable: false}
 
-    var person = {}
-    // 这是一个典型的访问器属性定义
-    Object.defineProperty(person,"name",{
-        configurable:true,
-        enumerable:true,
-        set:function(value){
-            this.value = value
-        },
-        get:function(){
-            return this.value || "养了只柯基"
-        }
-    })
-    //转换为数据属性定义 ,
-    Object.defineProperty(person,"name",{
-        // 不能把数据属性中的特征属性定义放到访问器属性中
-        value:"咖哥",
-        writable:true,
-        configurable:true,
-        enumerable:true,
+//     var person = {}
+//     // 这是一个典型的访问器属性定义
+//     Object.defineProperty(person,"name",{
+//         configurable:true,
+//         enumerable:true,
+//         set:function(value){
+//             this.value = value
+//         },
+//         get:function(){
+//             return this.value || "养了只柯基"
+//         }
+//     })
+//     //转换为数据属性定义 ,
+//     Object.defineProperty(person,"name",{
+//         // 不能把数据属性中的特征属性定义放到访问器属性中
+//         value:"咖哥",
+//         writable:true,
+//         configurable:true,
+//         enumerable:true,
 
-        // 不能共存
-        // set:function(value){
-        //     this.value = value
-        // },
-        // get:function(){
-        //     return this.value || "养了只柯基"
-        // }
-    })
+//         // 不能共存
+//         // set:function(value){
+//         //     this.value = value
+//         // },
+//         // get:function(){
+//         //     return this.value || "养了只柯基"
+//         // }
+//     })
 
-    var kobe={
-    number:24,
-    age:32,
-    job:"basketball player",
-    home:"USA",
-    sayJob:function(){
-       return this.job
-    }
-}
+//     var kobe={
+//     number:24,
+//     age:32,
+//     job:"basketball player",
+//     home:"USA",
+//     sayJob:function(){
+//        return this.job
+//     }
+// }
 
-var james={
-    number:23,
-    age:22,
-    job:"basketball player",
-    home:"USA",
-    sayJob:function(){
-       return this.job
-    }
-}
+// var james={
+//     number:23,
+//     age:22,
+//     job:"basketball player",
+//     home:"USA",
+//     sayJob:function(){
+//        return this.job
+//     }
+// }
 
-function createObj(number,age,job,home){
-    var o = new Object(); //创建一个中间对象
-    o.number = number;
-    o.age = age;
-    o.job = job;
-    o.home = home;
-    o.sayJob = function(){
-        return this.job;
-    }
-    return o;
-}
+// function createObj(number,age,job,home){
+//     var o = new Object(); //创建一个中间对象
+//     o.number = number;
+//     o.age = age;
+//     o.job = job;
+//     o.home = home;
+//     o.sayJob = function(){
+//         return this.job;
+//     }
+//     return o;
+// }
 
     // let alean = createObj(3,21,"basketball player","USA")
     // let lindan = createObj(10,23,"badminton player","China")
@@ -561,19 +561,21 @@ function createObj(number,age,job,home){
     // console.log(p1.__proto__ === Person.prototype); //true
     // console.log(Person.prototype.__proto__ === Object.prototype) //true
     // console.log(Object.prototype.__proto__ === null) //true
-    function Anmail(name,age){
-        this.name = name;
-        this.age = age;
-        this.getName = function(){
-            console.log("constructor")
-        }
-    }
-    Anmail.prototype.getName = function(){
-        console.log("prototype")
-    }
+    // function Anmail(name,age){
+    //     this.name = name;
+    //     this.age = age;
+    //     this.getName = function(){
+    //         console.log("constructor")
+    //     }
+    // }
+    // Anmail.prototype.getName = function(){
+    //     console.log("prototype")
+    // }
 
-    let dog = new Anmail("keji",22)
-    dog.getName() //constructor
+    // let dog = new Anmail("keji",22)
+    // dog.getName() //constructor
+
+    
     </script>    
 </body>
 </html>
