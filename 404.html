@@ -10,26 +10,26 @@
 
 <body>
     <script>
-        function Person(){}
-        Person.prototype.name="default name";
-        Person.prototype.age = 22;
-        Person.prototype.skills = ["js","ts"]
-
-        let xiaohong = new Person();
-        
-        let xiaozhang = new Person();
-        //不同的实例需要不同的值： 基本数据类型，可以通过挂载同名属性到实例对象上解决
-        xiaozhang.name = "xiaozhang";
-        xiaozhang.age = 23;
-        // 假设xiaozhang是从java转型的web开发，那么他比xiaohong多一项技能。这个时候我们就要添加xiaozhang的技能
-        xiaozhang.skills.push("java");
-        
-        // 结果如下：
-        console.log(xiaohong.name,xiaohong.age,xiaohong.skills) //default name 22 ["js", "ts", "java"]
-        console.log(xiaozhang.name,xiaozhang.age,xiaozhang.skills) //xiaozhang 23 ["js", "ts", "java"]
 
 
-        
+        function Person(name,age){
+            //创建要返回的对象
+            var o = new Object();
+
+            //定义私有变量和函数 
+            o.name = name;
+            o.age = age;
+
+            //添加方法
+            o.sayName = function(){
+                console.log(name)
+            }
+            //返回对象 
+            return o
+        }
+
+        var friend = Person("Nicholas", 29, "Software Engineer"); 
+        friend.sayName();  //"Nicholas"
     </script>
 </body>
 
