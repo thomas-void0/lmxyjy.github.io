@@ -10,19 +10,42 @@
 
 <body>
     <script>
+        // // 寄生组合模式:我们的子类上少调用一次new Parent()
+        // function object(o){
+        //     function F(){}
+        //     F.prototype = o;
+        //     return new F();
+        // }
 
-        function Person (){
+        // function hehe(child,parent){
+        //     const pro = object(parent.prototype);
+        //     pro.constructor = child;
+        //     child.prototype = pro;
+        // }
 
-        }
-        Person.prototype.sayHi = function(){
-            console.log("hi")
-        }
+        // function Parent(name){
+        //     this.name = name;
+        // }
+        // Parent.prototype.sayHi = function(){
+        //     console.log("hi")
+        // }
+        // function Child(name){
+        //     Parent.call(this,name)
+        // }
+        
+        // hehe(Child,Parent);
 
-        function Son(){
-            
-        }
-        Son.prototype = Person.prototype;
+        // Child.prototype.sayAge = function(){
+        //     console.log("hehehehe")
+        // }
+
+        // let c = new Child("泰坦尼克号")
+
+        // c.sayAge()
+        // c.sayHi()
+        
     </script>
+
 </body>
 
 </html>
