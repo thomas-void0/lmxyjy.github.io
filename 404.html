@@ -11,25 +11,17 @@
 <body>
     <script>
 
+        function Person (){
 
-        function Person(name,age){
-            //创建要返回的对象
-            var o = new Object();
-
-            //定义私有变量和函数 
-            o.name = name;
-            o.age = age;
-
-            //添加方法
-            o.sayName = function(){
-                console.log(name)
-            }
-            //返回对象 
-            return o
+        }
+        Person.prototype.sayHi = function(){
+            console.log("hi")
         }
 
-        var friend = Person("Nicholas", 29, "Software Engineer"); 
-        friend.sayName();  //"Nicholas"
+        function Son(){
+            
+        }
+        Son.prototype = Person.prototype;
     </script>
 </body>
 
