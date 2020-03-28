@@ -2,3 +2,4 @@ _site/
 .sass-cache/
 .jekyll-metadata
 2020-3-22-异步常用处理方式.md
+2020-3-27-如何自己打造一个promise.md
